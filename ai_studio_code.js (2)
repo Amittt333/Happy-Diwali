@@ -1,0 +1,223 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    const tl = gsap.timeline();
+
+    tl.to(".main-title", { opacity: 1, y: -20, duration: 1, ease: "power4.out" })
+      .to(".subtitle", { opacity: 1, y: -20, duration: 1, ease: "power4.out" }, "-=0.5")
+      .to(".diya-container", { opacity: 1, scale: 1.2, duration: 1, ease: "elastic.out(1, 0.3)" }, "-=0.5")
+      .to(".cta-btn", { opacity: 1, duration: 1 }, "-=0.5");
+
+    // Scroll Animations for other sections
+    gsap.utils.toArray(".section-title").forEach(title => {
+        gsap.to(title, {
+            scrollTrigger: {
+                trigger: title,
+                start: "top 85%",
+            },
+            opacity: 1,
+            y: 0,
+            duration: 1
+        });
+    });
+
+    gsap.utils.toArray(".wish-card").forEach((card, i) => {
+        gsap.to(card, {
+            scrollTrigger: {
+                trigger: card,
+                start: "top 85%",
+            },
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            delay: i * 0.2
+        });
+    });
+
+    // --- Fireworks Logic ---
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let fireworks = [];
+    let particles = [];
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+        constructor(x, y, color) {
+            this.x = x;
+            this.y = y;
+            this.color = color;
+            this.velocity = {
+                x: (Math.random() - 0.5) * 8,
+                y: (Math.random() - 0.5) * 8
+            };
+            this.alpha = 1;
+            this.friction = 0.95;
+        }
+
+        draw() {
+            ctx.globalAlpha = this.alpha;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+
+        update() {
+            this.velocity.x *= this.friction;
+            this.velocity.y *= this.friction;
+            this.x += this.velocity.x;
+            this.y += this.velocity.y;
+            this.alpha -= 0.01;
+        }
+    }
+
+    class Firework {
+        constructor(x, y, targetY, color) {
+            this.x = x;
+            this.y = y;
+            this.targetY = targetY;
+            this.color = color;
+            this.velocity = { x: (Math.random() - 0.5) * 2, y: -12 };
+            this.dead = false;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+        }
+
+        update() {
+            this.x += this.velocity.x;
+            this.y += this.velocity.y;
+            if (this.y <= this.targetY) {
+                this.dead = true;
+                this.explode();
+            }
+        }
+
+        explode() {
+            for (let i = 0; i < 80; i++) {
+                particles.push(new Particle(this.x, this.y, this.color));
+            }
+        }
+    }
+
+    function launchFirework() {
+        const x = Math.random() * canvas.width;
+        const y = canvas.height;
+        const targetY = Math.random() * (canvas.height / 2);
+        const colors = ['#ffd700', '#ff4500', '#ffcc00', '#ff00ff', '#00ffff'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        fireworks.push(new Firework(x, y, targetY, color));
+    }
+
+    function animate() {
+        ctx.fillStyle = 'rgba(15, 12, 41, 0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        fireworks.forEach((fw, i) => {
+            fw.update();
+            fw.draw();
+            if (fw.dead) fireworks.splice(i, 1);
+        });
+
+        particles.forEach((p, i) => {
+            p.update();
+            p.draw();
+            if (p.alpha <= 0) particles.splice(i, 1);
+        });
+
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Auto-launch fireworks
+    setInterval(launchFirework, 1500);
+
+    // Click to launch
+    window.addEventListener('click', (e) => {
+        const colors = ['#ffd700', '#ff4500', '#ffcc00', '#ffffff'];
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        fireworks.push(new Firework(e.clientX, canvas.height, e.clientY, color));
+    });
+
+    // --- Cursor Sparkle ---
+    const cursor = document.querySelector('.sparkle-cursor');
+    window.addEventListener('mousemove', (e) => {
+        gsap.to(cursor, {
+            x: e.clientX,
+            y: e.clientY,
+            duration: 0.1
+        });
+    });
+
+    // --- Interactive Features ---
+    
+    // Diya Glow increase
+    const diya = document.getElementById('mainDiya');
+    diya.addEventListener('click', () => {
+        gsap.to(".diya-glow", { scale: 3, opacity: 1, duration: 0.3, yoyo: true, repeat: 1 });
+        gsap.to(".flame", { scale: 1.5, duration: 0.3, yoyo: true, repeat: 1 });
+    });
+
+    // Music Control
+    const music = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    const musicIcon = document.getElementById('musicIcon');
+    let isPlaying = false;
+
+    musicToggle.addEventListener('click', () => {
+        if (isPlaying) {
+            music.pause();
+            musicIcon.setAttribute('data-lucide', 'volume-x');
+        } else {
+            music.play();
+            musicIcon.setAttribute('data-lucide', 'volume-2');
+        }
+        isPlaying = !isPlaying;
+        lucide.createIcons();
+    });
+
+    // Celebrate Button
+    document.getElementById('celebrateBtn').addEventListener('click', () => {
+        for(let i=0; i<10; i++) {
+            setTimeout(launchFirework, i * 200);
+        }
+        window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    });
+
+    // Greeting Generator
+    const generateBtn = document.getElementById('generateBtn');
+    const userNameInput = document.getElementById('userName');
+    const greetingDisplay = document.getElementById('greetingDisplay');
+    const shareBtn = document.getElementById('shareBtn');
+
+    generateBtn.addEventListener('click', () => {
+        const name = userNameInput.value.trim();
+        if (name) {
+            greetingDisplay.innerHTML = `Happy Diwali, ${name}! <br> May your life shine brighter than a thousand diyas! ✨`;
+            gsap.from(greetingDisplay, { opacity: 0, scale: 0.8, duration: 0.5 });
+            shareBtn.style.display = 'flex';
+        } else {
+            alert("Please enter your name first!");
+        }
+    });
+
+    shareBtn.addEventListener('click', () => {
+        const name = userNameInput.value.trim();
+        const text = `Happy Diwali, ${name}! May your life shine brighter than a thousand diyas! Check out this magical wish: ${window.location.href}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    });
+});

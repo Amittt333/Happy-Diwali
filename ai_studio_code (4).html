@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Diwali 2026 | Festival of Lights</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- Background Canvas for Fireworks & Particles -->
+    <canvas id="canvas"></canvas>
+    <div class="sparkle-cursor"></div>
+
+    <!-- Music Control -->
+    <div class="music-control" id="musicToggle">
+        <i data-lucide="volume-x" id="musicIcon"></i>
+        <span class="music-text">Festive Music</span>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="lanterns-container">
+            <div class="lantern" style="--delay: 0s; --left: 10%;"></div>
+            <div class="lantern" style="--delay: 2s; --left: 30%;"></div>
+            <div class="lantern" style="--delay: 1s; --left: 60%;"></div>
+            <div class="lantern" style="--delay: 3s; --left: 85%;"></div>
+        </div>
+
+        <div class="hero-content">
+            <h1 class="main-title">✨ Happy Diwali 2026 ✨</h1>
+            <p class="subtitle">May the Festival of Lights Fill Your Life With Happiness, Prosperity & Love.</p>
+            
+            <div class="diya-container" id="mainDiya">
+                <div class="flame"></div>
+                <div class="diya-body"></div>
+                <div class="diya-glow"></div>
+            </div>
+
+            <button class="cta-btn" id="celebrateBtn">
+                <span>Celebrate Diwali</span>
+                <div class="btn-glow"></div>
+            </button>
+        </div>
+        <div class="scroll-indicator"><span></span></div>
+    </section>
+
+    <!-- Wishes Section -->
+    <section class="wishes" id="wishes">
+        <h2 class="section-title">Festive Blessings</h2>
+        <div class="cards-grid">
+            <div class="wish-card">
+                <i data-lucide="sun"></i>
+                <h3>Prosperity</h3>
+                <p>May Goddess Lakshmi bless your home with wealth and abundance.</p>
+            </div>
+            <div class="wish-card">
+                <i data-lucide="heart"></i>
+                <h3>Love</h3>
+                <p>May your heart be filled with joy and your home with laughter.</p>
+            </div>
+            <div class="wish-card">
+                <i data-lucide="sparkles"></i>
+                <h3>Light</h3>
+                <p>May the divine light guide you toward a path of peace and success.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cultural Section -->
+    <section class="about" id="about">
+        <div class="about-container">
+            <div class="about-text">
+                <h2 class="section-title">The Festival of Lights</h2>
+                <p>Diwali symbolizes the spiritual "victory of light over darkness, good over evil, and knowledge over ignorance." It is a time for family gatherings, sharing sweets, and lighting the way for a bright future.</p>
+                <div class="rangoli-decoration"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Greeting Generator Section -->
+    <section class="generator" id="generator">
+        <div class="glass-card">
+            <h2 class="section-title">Send a Diwali Wish</h2>
+            <p>Enter your name to create a magical greeting!</p>
+            <div class="input-group">
+                <input type="text" id="userName" placeholder="Enter your name..." maxlength="20">
+                <button id="generateBtn">Generate ✨</button>
+            </div>
+            <div id="greetingDisplay" class="greeting-display"></div>
+            <button id="shareBtn" class="share-btn" style="display: none;">
+                <i data-lucide="share-2"></i> Share on WhatsApp
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Made with ❤️ to spread happiness and light.</p>
+        <p class="year">© 2026 Diwali Celebration</p>
+    </footer>
+
+    <!-- Audio element (Add your own mp3 link here) -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- GSAP & Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
